@@ -1,20 +1,30 @@
 # Cross-platform C++ BaseClass and type system
 
+by Qingfeng Xia
+
+It is extracted from FreeCAD project, it has the same license as FreeCAD: LGPL v2.1
+
+This piece of code extraction personal work is NOT sponsored by Qingfeng Xia's employment.
+
+
+
 Features:
+
 + Base class for C++
 + Type system:  extracted from FreeCAD's Base module <>
++ Collection of some header only libraries
 + Design pattern
-+ template class are supported by a new macro `TYPE_SOURCE_TEMPLATE`
 
 
-todo:
+Todo:
 - shared_ptr<> replace all void*
 - python wrapping helper
 - cross-platform, OS, compiler `compatible.h`
 - helper methods into BaseClass
 
-
 https://atomheartother.github.io/c++/2018/07/12/CPPDynLib.html
+
+
 
 ## BaseClass
 
@@ -28,13 +38,16 @@ see:
 [VTK: `vtkObjectBase` and `vtkObject`](https://vtk.org/doc/nightly/html/classvtkObjectBase.html)
 
 
-### function of base class
+### Typical functions of base class
 
 1. type system, implemented by c++ macro
 2. reference counting, C++11 shared_pointer<> has this function
 3. event/observer/subscription pattern, depends on the design of the framework
+4. serialization,`std::to_string`
 
 ### help on script wrapping
+
+
 
 
 ## Type system 
@@ -52,11 +65,21 @@ Benefits:
 
 Qt's type or meta data system is more powerful, while if you need such a powerful system, just use QT. 
 
-### my top up
+OpenCASCADE, also have the macro to enable type system.
+
+```cpp
+#include <Standard_Type.hxx>
+
+IMPLEMENT_STANDARD_RTTIEXT(ShapeUpgrade_Tool,Standard_Transient)
+```
+
+
+
+###  top up over FreeCAD's implementation
 
 1. error string, when forget to init/register the class
-2. it is thread-unsafe, for type init, is that safe afterward?
-3. template class support
+2. it is thread-unsafe during type init, but it should be  thread-safe as no modification to the type information.
+3. template class are supported by a new macro `TYPE_SOURCE_TEMPLATE`
 4. example code <./TypeTest.cpp>
 5. types can be registered by `class::init()` and `Type::destruct()` and `init()` again
 
@@ -116,10 +139,25 @@ see the [TypeTest source](TypeTest.cpp)
 ### included design patterns
 
 + AbstractFactory
-+ 
 
-## Python support
-<pywrap>
+
+
+## Collection of some header only libraries
+
++ toml11: header only lib: https://github.com/ToruNiina/toml11
+
+ https://github.com/skystrife/cpptoml
+
++ python style C++17 argparse: https://github.com/p-ranav/argparse
+
++ json: https://nlohmann.github.io/json/
+
+see more header-only open source libraries at :https://awesomeopensource.com/projects/header-only
+
+
+
+## Python interface support
+https://github.com/qingfengxia/python_wrap
 ### translate from CXX to Pybind, 
 
 pybind11: defined objects
@@ -137,10 +175,6 @@ using py=pybind11;
 
 
 Exception, the translaton is not necessary, it is easy to to in pybind11
-
-
-
-
 
 
 
@@ -198,21 +232,4 @@ void BaseClass::setPyObject(PyObject *)
 
 ### FreeCAD from xml to wrapping
 
-https://github.com/FreeCAD/FreeCAD/blob/master/cMake/FreeCadMacros.cmake
-
-```
-macro(generate_from_xml BASE_NAME)
-    set(TOOL_PATH "${CMAKE_SOURCE_DIR}/src/Tools/generate.py")
-```
-
-<Attribute Name="Module" ReadOnly="true">
-
-<Attribute Name="TypeId" ReadOnly="true">
-
-<Methode Name="getAllDerivedFrom" Const="true">
-
-<Methode Name="isDerivedFrom" Const="true">
-
-will generated 
-
-<Class>PyImp.cpp:  can be replaced by py::class_<class>,  why parent class does not show up. Also why why not derived from ClassBasePy
+see Python wrapping chapter in the ebook: Module developer's guide to FreeCAD's source code
