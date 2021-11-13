@@ -31,7 +31,7 @@
 //#include "Interpreter.h"   //  Interpreter().loadModule(Mod.c_str());
 ///#include "Console.h"  // for logging only
 
-#if PPP_BUILD_PYTHON
+#if FC_BUILD_PYTHON
 #include <Python.h>
 #include <pybind11/pybind11.h> // pybind11::module sys = py::module::import("sys");
 namespace py = pybind11;

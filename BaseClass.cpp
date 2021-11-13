@@ -97,7 +97,7 @@ void BaseClass::initSubclass(Base::Type& toInit, const char* ClassName, const ch
     toInit = Base::Type::createType(parentType, ClassName, method, destruct);
 }
 
-#if PPP_BUILD_PYTHON
+#if FC_BUILD_PYTHON
 /**
  * This method returns the Python wrapper for a C++ object. It's in the responsibility of
  * the programmer to do the correct reference counting. Basically there are two ways how

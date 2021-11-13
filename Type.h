@@ -24,8 +24,11 @@
 #ifndef BASE_TYPE_H
 #define BASE_TYPE_H
 
-//#include "../PPPConfig.h"
+#if FC_BUILD_BASE
+#include "FCConfig.h"
+#else
 #include "./compatible.h"
+#endif
 
 // Std. configurations
 #include <map>

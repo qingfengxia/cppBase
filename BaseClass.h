@@ -26,7 +26,7 @@
 
 #include "./Type.h"
 
-#if PPP_BUILD_PYTHON
+#if FC_BUILD_PYTHON
 // Python stuff, temperary make it opaque
 #include <Python.h>
 // can be done by pybind11:Object
@@ -158,7 +158,7 @@ namespace Base
         static void init(void);
         static void destructType(void);
 
-#if PPP_BUILD_PYTHON
+#if FC_BUILD_PYTHON
         virtual PyObject* getPyObject(void);
         virtual void setPyObject(PyObject*);
 #endif
