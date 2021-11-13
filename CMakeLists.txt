@@ -1,41 +1,47 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(PPP_FC_BASE ON)
+set(FC_TYPESYSTEM_ONLY OFF)
 set(FC_USE_PYTHON OFF)
-set(PPP_USE_PYBIND OFF)
+set(FC_USE_PYBIND OFF)
 
-if(ON)
-#if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    # I am a standalone project
+set(FC_BASE_NAME "FreeCAD_Base")
+
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(hasParent)
+    message(STATUS "I am called from other project with add_subdirectory()")
+else()
+    message(STATUS "I am a standalone project for testing")
     # the output lib has strange SOVERSION suffix, if add_subdirectory() to a parent project
-    if(PPP_FC_BASE)
-        project(FC_BASE CXX)
-    else()
+    if(FC_TYPESYSTEM_ONLY)
         project(TypeSystem CXX)
+        set(PROJECT_BRIEF " TypeSystem module extracted from FreeCAD Base module by Qingfeng Xia")
+    else()
+        project(FC_BASE CXX)
+        set(PROJECT_BRIEF "Base module extracted from FreeCAD by Qingfeng Xia")
     endif()
-    set(PROJECT_BRIEF " TypeSystem/Base module extracted from FreeCAD by Qingfeng Xia")
+
     #project version definition
     set(CMAKE_BUILD_TYPE Debug)
 
     # std can and should be applied to target only
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-    message(STATUS "I am called from other project with add_subdirectory()")
 endif()
 
 # it is fine to use clang, but more warning.
 #SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
 SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 
+add_definitions(-DFreeCADBase_EXPORTS)
+
 #####################################################
 set(FreeCADBase_SOURCES 
     BaseClass.cpp
     Type.cpp
-    Exception.cpp  # fialed to compile
-    Factory.cpp  # this can be compiled
-    #Tools.cpp
-    #Console.cpp
+    Exception.cpp  # modified a lot to be compilable
+    Factory.cpp
+    Tools.cpp
+    Console.cpp
 )
 
 SET(FreeCADBase_UNITAPI_SRCS
@@ -65,7 +71,7 @@ SET(FreeCADBase_UNITAPI_SRCS
 
 SET(FreeCADBase_GEOM_SRCS
     Axis.cpp
-    #Builder3D.cpp
+    Builder3D.cpp
     CoordinateSystem.cpp
     DualQuaternion.cpp
     Matrix.cpp
@@ -87,7 +93,7 @@ set(MyBase_LINK_LIBS "")
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-if(PPP_FC_BASE)
+if(NOT FC_TYPESYSTEM_ONLY)
     add_definitions("-DFC_BUILD_BASE")
     list(APPEND FreeCADBase_SOURCES  ${FreeCADBase_UNITAPI_SRCS})
     list(APPEND FreeCADBase_SOURCES  ${FreeCADBase_GEOM_SRCS})
@@ -95,7 +101,7 @@ if(PPP_FC_BASE)
     find_package(Boost REQUIRED COMPONENTS system thread filesystem)
     find_package(Qt5 REQUIRED COMPONENTS Core)
 
-    list(APPEND MyBase_LINK_LIBS Qt5::Core)  #  ${Qt5Core_LIBRARIES}
+    list(APPEND MyBase_LINK_LIBS Qt5::Core)  #  another way is get all lib: ${Qt5Core_LIBRARIES}
     list(APPEND MyBase_LINK_LIBS Boost::filesystem Boost::filesystem)
 
     include_directories(
@@ -110,7 +116,7 @@ if(FC_USE_PYTHON)
     add_definitions("-DFC_BUILD_PYTHON")
 endif()
 
-if(PPP_USE_PYBIND)
+if(FC_USE_PYBIND)
     find_package(pybind11 REQUIRED)
     include_directories() # todo
     add_definitions("-DPPP_BUILD_PYBIND")
@@ -124,11 +130,10 @@ set(MyBase_TEST "MyBaseTest")
 set(MyBase_MODULE "MyBase")
 
 
-message("${FreeCADBase_SOURCES}")
 add_library(${MyBase_LIB} SHARED "${FreeCADBase_SOURCES}")
 #set_target_properties(${MyBase_LIB} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${MyBase_LIB} "${MyBase_LINK_LIBS}")
-set_target_properties(${MyBase_LIB} PROPERTIES OUTPUT_NAME "pppBase")
+set_target_properties(${MyBase_LIB} PROPERTIES OUTPUT_NAME ${FC_BASE_NAME})
 
 # This will name your output .so files "libsomething.1.0" which is pretty useful
 set_target_properties(${MyBase_LIB} 

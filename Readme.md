@@ -156,22 +156,34 @@ see more header-only open source libraries at :https://awesomeopensource.com/pro
 
 
 
-### Why Base::Stream is needed?
+## Console
+
+Depends on how this FreeCAD_Base module is used, input and output stream could be directed to other stream like within GUI.
+
+### Console class has been commented out
+Console() is not used directly, but Exception classes may use `Console()`
+`//#include "Console.h"`
+
+```c++
+#ifdef FC_DEBUG
+        Console().Warning("\"%s\" is not registered\n", sScriptName);
+#endif
+```
+
+```c++
+
+FileException
+```
+
+### `Base::Stream` is replaced by `std::ofstream`
+
+Why `Base::Stream` is needed?
 > The ofstream class is provided for convenience. On Windows
 platforms it opens a stream with UCS-2 encoded file name
 while on Linux platforms the file name is UTF-8 encoded.
  @author Werner Mayer
 
-FileInfo.h  TimeInfo.h
-
-### Console class has been commented out
-`//#include "Console.h"`
-
-```
-#ifdef FC_DEBUG
-        Console().Warning("\"%s\" is not registered\n", sScriptName);
-#endif
-```
+`FileInfo.h  TimeInfo.h`
 
 ## Unit and Quantity System
 
@@ -181,7 +193,7 @@ https://sourceforge.net/projects/winflexbison/files/win_flex_bison3-latest.zip/d
 
 ## Python interface support
 https://github.com/qingfengxia/python_wrap
-### translate from CXX to Pybind, 
+### translate from CXX to Pybind
 
 pybind11: defined objects
 handle, object, bool_, int_, float_, str, bytes, tuple, list, dict, slice, none, capsule, iterable, iterator, function, buffer, array

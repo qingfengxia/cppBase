@@ -164,7 +164,7 @@ std::string Base::Tools::escapedUnicodeFromUtf8(const char *s)
     Py_DECREF(unicode);
     return escapedstr;
 }
-#endif
+
 
 std::string Base::Tools::escapedUnicodeToUtf8(const std::string& s)
 {
@@ -180,6 +180,7 @@ std::string Base::Tools::escapedUnicodeToUtf8(const std::string& s)
     Py_DECREF(unicode);
     return string;
 }
+#endif
 
 QString Base::Tools::escapeEncodeString(const QString& s)
 {
