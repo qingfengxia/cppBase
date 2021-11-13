@@ -211,6 +211,7 @@ QString UnitsApi::schemaTranslate(const Base::Quantity& quant, double &factor, Q
 //}
 //
 
+#if FC_BUILD_PYTHON
 double UnitsApi::toDbl(PyObject *ArgObj, const Base::Unit &u)
 {
     if (PyUnicode_Check(ArgObj)) {
@@ -253,6 +254,7 @@ Quantity UnitsApi::toQuantity(PyObject *ArgObj, const Base::Unit &u)
 
     return Quantity(d,u);
 }
+#endif
 
 void UnitsApi::setDecimals(int prec)
 {

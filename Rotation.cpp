@@ -30,7 +30,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "Rotation.h"
 #include "Matrix.h"
-#include "Base/Exception.h"
+#include "Exception.h"
 
 using namespace Base;
 

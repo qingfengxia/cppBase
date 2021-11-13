@@ -32,7 +32,7 @@
 #include "Quantity.h"
 #include "Exception.h"
 #include "UnitsApi.h"
-#include "Console.h"
+//#include "Console.h"
 #include <boost/math/special_functions/fpclassify.hpp>
 
 /** \defgroup Units Units system
@@ -45,7 +45,7 @@
 # pragma warning(disable : 4003)
 # pragma warning(disable : 4018)
 # pragma warning(disable : 4065)
-# pragma warning( disable : 4273 )
+# pragma warning(disable : 4273 )
 # pragma warning(disable : 4335) // disable MAC file format warning on VC
 #endif
 

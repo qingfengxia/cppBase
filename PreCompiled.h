@@ -28,8 +28,14 @@
 
 #ifdef _PreComp_
 
+#if FC_BUILD_PYTHON
 // Python
 #include <Python.h>
+#endif
+#if FC_BUILD_PYBIND
+// Python
+#include <pybind11.h>
+#endif
 
 // standard
 #include <fcntl.h>
@@ -77,6 +83,7 @@
 #include <fstream>
 #include <sstream>
 
+#if FC_BUILD_FULL
 // Xerces
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XercesVersion.hpp>
@@ -108,6 +115,8 @@
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
+
+#endif
 
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
