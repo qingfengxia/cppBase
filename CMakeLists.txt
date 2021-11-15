@@ -143,30 +143,32 @@ set_target_properties(${MyBase_LIB}
 )
 
 ##############################################################
-add_executable(${MyBase_TEST}
-    TypeTest.cpp
-)
-#add_dependencies(MyTypeTest, MyType)
-target_link_libraries(${MyBase_TEST} ${MyBase_LIB})
-set_target_properties(${MyBase_TEST} PROPERTIES OUTPUT_NAME "pppBaseTest")
+if(NOT hasParent)
+    add_executable(${MyBase_TEST}
+        TypeTest.cpp
+    )
+    #add_dependencies(MyTypeTest, MyType)
+    target_link_libraries(${MyBase_TEST} ${MyBase_LIB})
+    set_target_properties(${MyBase_TEST} PROPERTIES OUTPUT_NAME "pppBaseTest")
 
+    # add_executable(Sequencer_Test
+    #     SequencerTest.cpp
+    #     Sequencer.cpp
+    # )
+    # target_link_libraries(Sequencer_Test ${MyBase_LIB})
 
-# add_executable(Sequencer_Test
-#     SequencerTest.cpp
-#     Sequencer.cpp
-# )
-# target_link_libraries(Sequencer_Test ${MyBase_LIB})
+endif()
 
 ##########################################################
 # To build shared libraries in Windows, we set CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS to TRUE.
 # See https://cmake.org/cmake/help/v3.4/variable/CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS.html
 # See https://blog.kitware.com/create-dlls-on-windows-without-declspec-using-new-cmake-export-all-feature/
 
-if(WIN32)
-    if( NOT MINGW)
-        set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    endif()
-endif()
+# if(WIN32)
+#     if(NOT MINGW)
+#         set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+#     endif()
+# endif()
 
 # Let's set compiler-specific flags
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
